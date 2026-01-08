@@ -1,0 +1,453 @@
+/* Marathon Reboot Aesthetic Styles */
+
+:root {
+  --marathon-black: #0a0a0a;
+  --marathon-dark: #1a1a1a;
+  --marathon-cyan: #00ffff;
+  --marathon-orange: #ff6b35;
+  --marathon-red: #ff006e;
+  --marathon-purple: #8338ec;
+  --marathon-white: #f0f0f0;
+  --marathon-gray: #666666;
+}
+
+/* Marathon-specific backgrounds */
+.marathon-bg {
+  background: linear-gradient(135deg, var(--marathon-black) 0%, var(--marathon-dark) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.marathon-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 255, 0.03) 2px, rgba(0, 255, 255, 0.03) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0, 255, 255, 0.03) 2px, rgba(0, 255, 255, 0.03) 4px);
+  pointer-events: none;
+}
+
+/* Marathon grid pattern */
+.marathon-grid {
+  background-image:
+    linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  position: relative;
+}
+
+/* Marathon card/panel style */
+.marathon-card {
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
+  border: 2px solid var(--marathon-cyan);
+  border-image: linear-gradient(45deg, var(--marathon-cyan), var(--marathon-purple)) 1;
+  position: relative;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 20px) 0,
+    100% 20px,
+    100% 100%,
+    20px 100%,
+    0 calc(100% - 20px)
+  );
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.marathon-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.marathon-card:hover::before {
+  opacity: 1;
+}
+
+.marathon-card:hover {
+  border-color: var(--marathon-orange);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+}
+
+/* Marathon corner accents */
+.marathon-corner-accent::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 30px;
+  height: 30px;
+  border-top: 3px solid var(--marathon-orange);
+  border-right: 3px solid var(--marathon-orange);
+}
+
+/* Marathon glitch text effect */
+.marathon-glitch {
+  position: relative;
+  animation: glitch-skew 2s infinite linear alternate-reverse;
+}
+
+.marathon-glitch::before,
+.marathon-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.marathon-glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--marathon-cyan);
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch-anim 3s infinite linear alternate-reverse;
+}
+
+.marathon-glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 var(--marathon-orange);
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch-anim 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% {
+    clip: rect(61px, 9999px, 85px, 0);
+  }
+  20% {
+    clip: rect(98px, 9999px, 3px, 0);
+  }
+  40% {
+    clip: rect(7px, 9999px, 28px, 0);
+  }
+  60% {
+    clip: rect(55px, 9999px, 92px, 0);
+  }
+  80% {
+    clip: rect(19px, 9999px, 45px, 0);
+  }
+  100% {
+    clip: rect(73px, 9999px, 11px, 0);
+  }
+}
+
+@keyframes glitch-skew {
+  0% {
+    transform: skew(0deg);
+  }
+  10% {
+    transform: skew(-2deg);
+  }
+  20% {
+    transform: skew(0deg);
+  }
+  30% {
+    transform: skew(1deg);
+  }
+  40% {
+    transform: skew(0deg);
+  }
+}
+
+/* Marathon terminal text */
+.marathon-terminal {
+  font-family: 'Courier New', monospace;
+  color: var(--marathon-cyan);
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  letter-spacing: 0.1em;
+}
+
+/* Marathon scanline effect */
+.marathon-scanlines {
+  position: relative;
+}
+
+.marathon-scanlines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(10px);
+  }
+}
+
+/* Marathon border glow */
+.marathon-border-glow {
+  position: relative;
+  border: 2px solid var(--marathon-cyan);
+  box-shadow:
+    0 0 10px rgba(0, 255, 255, 0.5),
+    inset 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+/* Marathon angular divider */
+.marathon-divider {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--marathon-cyan) 20%,
+    var(--marathon-orange) 50%,
+    var(--marathon-cyan) 80%,
+    transparent 100%
+  );
+  position: relative;
+}
+
+.marathon-divider::before,
+.marathon-divider::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--marathon-cyan);
+  transform: rotate(45deg);
+  top: -4px;
+}
+
+.marathon-divider::before {
+  left: 10%;
+}
+
+.marathon-divider::after {
+  right: 10%;
+  background: var(--marathon-orange);
+}
+
+/* Marathon section headers */
+.marathon-section-header {
+  font-family: 'Press Start 2P', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  background: linear-gradient(90deg, var(--marathon-cyan), var(--marathon-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+}
+
+.marathon-section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--marathon-cyan), transparent);
+}
+
+/* Marathon data display */
+.marathon-data-block {
+  background: rgba(0, 255, 255, 0.05);
+  border-left: 4px solid var(--marathon-cyan);
+  padding: 1rem;
+  font-family: 'Courier New', monospace;
+  position: relative;
+  overflow: hidden;
+}
+
+.marathon-data-block::before {
+  content: '>';
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--marathon-orange);
+  font-size: 1.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Marathon button style */
+.marathon-btn {
+  background: linear-gradient(135deg, var(--marathon-cyan) 0%, var(--marathon-purple) 100%);
+  border: none;
+  color: var(--marathon-black);
+  font-family: 'Press Start 2P', monospace;
+  text-transform: uppercase;
+  padding: 1rem 2rem;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% 100%,
+    10px 100%,
+    0 calc(100% - 10px)
+  );
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.marathon-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.marathon-btn:hover::before {
+  left: 100%;
+}
+
+.marathon-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+}
+
+/* Marathon metric display */
+.marathon-metric {
+  background: rgba(10, 10, 10, 0.9);
+  border: 2px solid var(--marathon-cyan);
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.marathon-metric-value {
+  font-size: 4rem;
+  font-weight: 900;
+  background: linear-gradient(180deg, var(--marathon-cyan), var(--marathon-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.marathon-metric-label {
+  font-family: 'Courier New', monospace;
+  color: var(--marathon-white);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 1rem;
+}
+
+/* Marathon loading bar */
+.marathon-loading-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.marathon-loading-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, var(--marathon-cyan), transparent);
+  animation: loading 2s linear infinite;
+}
+
+@keyframes loading {
+  0% {
+    left: -30%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Marathon hex pattern background */
+.marathon-hex-bg {
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 0% 100%, rgba(255, 107, 53, 0.1) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+/* Marathon hologram effect */
+.marathon-hologram {
+  position: relative;
+  animation: hologram-flicker 0.3s infinite;
+}
+
+@keyframes hologram-flicker {
+  0% {
+    opacity: 0.95;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.95;
+  }
+}
+
+/* Marathon corner markers */
+.marathon-corners {
+  position: relative;
+}
+
+.marathon-corners::before,
+.marathon-corners::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--marathon-cyan);
+}
+
+.marathon-corners::before {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.marathon-corners::after {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+}

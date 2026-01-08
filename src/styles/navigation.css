@@ -1,0 +1,119 @@
+/* ==========================================================================
+   Navigation & Navbar Styles
+   ========================================================================== */
+
+.navbar-transparent {
+  background-color: transparent;
+  backdrop-filter: none;
+  border-bottom: 1px solid transparent;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-opaque {
+  background-color: rgba(25, 25, 25, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(242, 242, 242, 0.1);
+}
+
+.navbar-opaque .navbar-link {
+  color: #d1d5db !important;
+}
+
+.navbar-opaque .navbar-brand {
+  color: #f2f2f2 !important;
+}
+
+.navbar-transparent .navbar-link {
+  color: #ffffff !important;
+}
+
+.navbar-transparent .navbar-brand {
+  color: #ffffff !important;
+}
+
+.navbar-transparent,
+.navbar-opaque {
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-transparent .navbar-link,
+.navbar-opaque .navbar-link,
+.navbar-transparent .navbar-brand,
+.navbar-opaque .navbar-brand {
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar-transparent #menu-btn,
+.navbar-opaque #menu-btn {
+  color: #ffffff;
+}
+
+.navbar-visible {
+  transform: translateY(0) !important;
+}
+
+.navbar-hidden {
+  transform: translateY(-100%) !important;
+}
+
+header.navbar-visible,
+header.navbar-hidden {
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar-link {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.navbar-link:hover {
+  transform: translateY(-1px);
+}
+
+.navbar-link::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #d8ff43, #43ff72);
+  transition: width 0.3s ease;
+}
+
+.navbar-link:hover::after {
+  width: 100%;
+}
+
+/* ==========================================================================
+   Mobile Menu Styles
+   ========================================================================== */
+
+#menu {
+  animation: slideDown 0.3s ease-out;
+}
+
+#menu a {
+  position: relative;
+  overflow: hidden;
+}
+
+#menu a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(216, 255, 67, 0.1),
+    rgba(216, 255, 67, 0.05)
+  );
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+#menu a:hover::before {
+  width: 100%;
+}

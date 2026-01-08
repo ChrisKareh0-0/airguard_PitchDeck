@@ -1,0 +1,37 @@
+/* ==========================================================================
+   Brand Colors & Accent Colors
+   ========================================================================== */
+
+/* Primary Brand Colors */
+.bg-primary-green {
+  background-color: #d8ff43 !important;
+}
+.text-primary-green {
+  color: #d8ff43 !important;
+}
+.bg-primary-dark {
+  background-color: #191919 !important;
+}
+.text-primary-dark {
+  color: #191919 !important;
+}
+.bg-primary-light {
+  background-color: #f2f2f2 !important;
+}
+.text-primary-light {
+  color: #f2f2f2 !important;
+}
+
+/* Accent Colors */
+.accent-red {
+  color: #ff5643 !important;
+}
+.accent-orange {
+  color: #ff9633 !important;
+}
+.accent-green {
+  color: #43ff72 !important;
+}
+.accent-cyan {
+  color: #43ffd6 !important;
+}

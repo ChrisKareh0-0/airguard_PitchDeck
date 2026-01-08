@@ -1,0 +1,14 @@
+export { default as HeroSection } from "./HeroSection";
+export { default as ProblemSection } from "./ProblemSection";
+export { default as SolutionSection } from "./SolutionSection";
+export { default as MarketSection } from "./MarketSection";
+export { default as ProductSection } from "./ProductSection";
+export { default as BusinessSection } from "./BusinessSection";
+export { default as SupportedBySection } from "./SupportedBySection";
+export { default as TeamSection } from "./TeamSection";
+export { default as CompetitionSection } from "./CompetitionSection";
+export { default as VisionSection } from "./VisionSection";
+export { default as AskSection } from "./AskSection";
+export { default as TractionSection } from "./TractionSection";
+export { default as ImpactSection } from "./ImpactSection";
+export { default as Footer } from "./Footer";

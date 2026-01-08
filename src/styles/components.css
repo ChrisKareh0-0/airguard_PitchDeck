@@ -1,0 +1,189 @@
+/* ==========================================================================
+   Glassmorphism & Card Styles
+   ========================================================================== */
+
+.glassmorphism {
+  background-color: rgba(25, 25, 25, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(242, 242, 242, 0.1);
+}
+
+.glassmorphism-card {
+  background: rgba(0, 0, 0);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.glassmorphism-card-light {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.market-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   Button & CTA Styles
+   ========================================================================== */
+
+.navbar-cta {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.2);
+}
+
+.hero-cta {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.2);
+}
+
+.hero-cta:active {
+  transform: translateY(0) scale(1.02);
+}
+
+/* ==========================================================================
+   Interactive Elements
+   ========================================================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.spinner {
+  border: 4px solid rgba(242, 242, 242, 0.3);
+  border-left-color: #d8ff43;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+/* ==========================================================================
+   Carousel & Testimonial Styles
+   ========================================================================== */
+
+.testimonial-card {
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.testimonial-card.slide-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.testimonial-card.slide-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.testimonial-card.slide-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.testimonial-card.slide-exit-active {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.carousel-nav-btn {
+  transition: all 0.3s ease;
+}
+
+.carousel-nav-btn:hover {
+  transform: scale(1.1);
+  backdrop-filter: blur(20px);
+}
+
+.carousel-dot {
+  transition: all 0.3s ease;
+}
+
+.carousel-dot:hover {
+  transform: scale(1.2);
+}
+
+/* ==========================================================================
+   Supported By Section
+   ========================================================================== */
+
+.supported-by-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.supported-by-card:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.supported-by-glow {
+  background: linear-gradient(45deg, #10b981, #374151);
+  filter: blur(20px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.supported-by-card:hover .supported-by-glow {
+  opacity: 0.3;
+}
+
+/* Mobile optimizations for Supported By */
+@media (max-width: 768px) {
+  .supported-by-card {
+    padding: 1.5rem;
+    margin: 0 0.5rem;
+  }
+
+  .supported-by-card:hover {
+    transform: translateY(-4px) scale(1.02);
+  }
+}
+
+/* ==========================================================================
+   Scroll to Top Button
+   ========================================================================== */
+
+.scroll-to-top-button {
+  animation: subtlePulse 2s ease-in-out infinite;
+} 
