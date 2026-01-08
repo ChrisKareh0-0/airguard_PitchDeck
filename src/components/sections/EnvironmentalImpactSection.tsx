@@ -247,8 +247,7 @@ function ChartCard({
   inverted?: boolean;
 }) {
   const currentValue = showWithValue ? withValue : withoutValue;
-  const maxValue = Math.max(withValue, withoutValue);
-  
+
   return (
     <div className={`p-4 rounded-xl border transition-all duration-500 ${
       isActive

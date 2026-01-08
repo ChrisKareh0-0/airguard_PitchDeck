@@ -97,7 +97,7 @@ export default function RisksSection() {
             We proactively identify and address risks through strategic
             planning, diverse partnerships, and continuous monitoring. Our
             90-day pilot has already de-risked core technology performance, and
-            we're building comprehensive mitigation strategies for market and
+            we&apos;re building comprehensive mitigation strategies for market and
             operational challenges.
           </p>
         </div>

@@ -2,34 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 
-// Import existing sections
-import {
-  ProblemSection,
-  SolutionSection,
-  MarketSection,
-  ProductSection,
-  BusinessSection,
-  ImpactSection,
-  SupportedBySection,
-  TeamSection,
-  CompetitionSection,
-  VisionSection,
-  AskSection,
-  TractionSection,
-  Footer,
-} from "@/components/sections";
-
 // Import new enhanced sections
 import {
   EnhancedHeroSection,
-  EnhancedProblemSection,
-  EnhancedMarketSection,
-  EnhancedTractionSection,
-  FinancialsSection,
-  CompetitiveAdvantageSection,
-  GoToMarketSection,
-  ExitStrategySection,
-  RisksSection,
   NetworkVisualizationSection,
   RoadAnalogySection,
   InterferenceVisualizationSection,
