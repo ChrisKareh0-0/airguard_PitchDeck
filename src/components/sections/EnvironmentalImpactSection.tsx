@@ -2,12 +2,18 @@
 
 import { useEffect, useState, useRef } from "react";
 
-export default function EnvironmentalImpactSection() {
-  const [isVisible, setIsVisible] = useState(false);
+import EditableText from "@/components/ui/EditableText";
+
+export default function EnvironmentalImpactSection({ isStatic = false, isEditMode = false }: { isStatic?: boolean, isEditMode?: boolean }) {
+  const [isVisible, setIsVisible] = useState(isStatic);
   const [activeComparison, setActiveComparison] = useState<"without" | "with">("without");
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isStatic) {
+      setIsVisible(true);
+      return;
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -22,7 +28,7 @@ export default function EnvironmentalImpactSection() {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [isStatic]);
 
   return (
     <section
@@ -43,44 +49,43 @@ export default function EnvironmentalImpactSection() {
         {/* Header */}
         <div className="text-center mb-10">
           <h2
-            className={`text-3xl md:text-5xl font-bold text-primary-light mb-4 transition-all duration-1000 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
+            className={`text-3xl md:text-5xl font-bold text-primary-light mb-4 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+              }`}
+            style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
           >
-            Environmental <span className="text-primary-green">Impact</span>
+            <EditableText initialText="Environmental" isEditMode={isEditMode} />{" "}
+            <span className="text-primary-green"><EditableText initialText="Impact" isEditMode={isEditMode} /></span>
           </h2>
           <p
-            className={`text-lg md:text-xl text-primary-light/60 max-w-2xl mx-auto transition-all duration-1000 delay-200 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
+            className={`text-lg md:text-xl text-primary-light/60 max-w-2xl mx-auto transition-all duration-1000 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+              }`}
+            style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
           >
-            Sustainable networking for a greener future
+            <EditableText initialText="Sustainable networking for a greener future" isEditMode={isEditMode} />
           </p>
         </div>
 
-        {/* Toggle Buttons */}
+        {/* Toggle Buttons (Static text for now, buttons act as controls) */}
         <div
-          className={`flex justify-center gap-4 mb-8 transition-all duration-1000 delay-300 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
+          className={`flex justify-center gap-4 mb-8 transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+          style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
         >
           <button
             onClick={() => setActiveComparison("without")}
-            className={`px-6 py-3 rounded-xl font-semibold text-base border-2 transition-all duration-300 ${
-              activeComparison === "without"
+            className={`px-6 py-3 rounded-xl font-semibold text-base border-2 transition-all duration-300 ${activeComparison === "without"
                 ? "bg-red-500/20 text-red-400 border-red-500/50"
                 : "bg-transparent text-primary-light/50 border-primary-light/20 hover:border-primary-light/40"
-            }`}
+              }`}
           >
             Without AirGuard
           </button>
           <button
             onClick={() => setActiveComparison("with")}
-            className={`px-6 py-3 rounded-xl font-semibold text-base border-2 transition-all duration-300 ${
-              activeComparison === "with"
+            className={`px-6 py-3 rounded-xl font-semibold text-base border-2 transition-all duration-300 ${activeComparison === "with"
                 ? "bg-primary-green/20 text-primary-green border-primary-green/50"
                 : "bg-transparent text-primary-light/50 border-primary-light/20 hover:border-primary-light/40"
-            }`}
+              }`}
           >
             With AirGuard
           </button>
@@ -88,34 +93,29 @@ export default function EnvironmentalImpactSection() {
 
         {/* Main Visualization */}
         <div
-          className={`relative transition-all duration-1000 delay-400 ${
-            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-          }`}
+          className={`relative transition-all duration-1000 delay-400 ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            }`}
+          style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
         >
-          <div className={`bg-[#1a1a1a] rounded-2xl overflow-hidden border-2 transition-all duration-500 ${
-            activeComparison === "with" 
-              ? "border-primary-green/30" 
+          <div className={`bg-[#1a1a1a] rounded-2xl overflow-hidden border-2 transition-all duration-500 ${activeComparison === "with"
+              ? "border-primary-green/30"
               : "border-red-500/30"
-          }`}>
-            {/* Header bar */}
-            <div className={`h-12 flex items-center justify-between px-6 border-b transition-colors duration-500 ${
-              activeComparison === "with" 
-                ? "bg-primary-green/10 border-primary-green/20" 
-                : "bg-red-500/10 border-red-500/20"
             }`}>
+            {/* Header bar */}
+            <div className={`h-12 flex items-center justify-between px-6 border-b transition-colors duration-500 ${activeComparison === "with"
+                ? "bg-primary-green/10 border-primary-green/20"
+                : "bg-red-500/10 border-red-500/20"
+              }`}>
               <div className="flex items-center gap-3">
-                <div className={`w-3 h-3 rounded-full animate-pulse ${
-                  activeComparison === "with" ? "bg-primary-green" : "bg-red-500"
-                }`} />
-                <span className={`font-semibold text-sm uppercase tracking-wider ${
-                  activeComparison === "with" ? "text-primary-green" : "text-red-400"
-                }`}>
+                <div className={`w-3 h-3 rounded-full animate-pulse ${activeComparison === "with" ? "bg-primary-green" : "bg-red-500"
+                  }`} />
+                <span className={`font-semibold text-sm uppercase tracking-wider ${activeComparison === "with" ? "text-primary-green" : "text-red-400"
+                  }`}>
                   {activeComparison === "with" ? "Sustainable Mode" : "Legacy Mode"}
                 </span>
               </div>
-              <span className={`text-sm ${
-                activeComparison === "with" ? "text-primary-green/70" : "text-red-400/70"
-              }`}>
+              <span className={`text-sm ${activeComparison === "with" ? "text-primary-green/70" : "text-red-400/70"
+                }`}>
                 Status: {activeComparison === "with" ? "Optimized" : "Degraded"}
               </span>
             </div>
@@ -129,8 +129,9 @@ export default function EnvironmentalImpactSection() {
                 withoutValue={100}
                 isActive={activeComparison === "with"}
                 showWithValue={activeComparison === "with"}
+                isEditMode={isEditMode}
               />
-              
+
               <ChartCard
                 title="E-Waste"
                 unit="kg/yr"
@@ -138,8 +139,9 @@ export default function EnvironmentalImpactSection() {
                 withoutValue={400}
                 isActive={activeComparison === "with"}
                 showWithValue={activeComparison === "with"}
+                isEditMode={isEditMode}
               />
-              
+
               <ChartCard
                 title="Energy Use"
                 unit="kWh"
@@ -148,8 +150,9 @@ export default function EnvironmentalImpactSection() {
                 isActive={activeComparison === "with"}
                 showWithValue={activeComparison === "with"}
                 inverted
+                isEditMode={isEditMode}
               />
-              
+
               <ChartCard
                 title="Efficiency"
                 unit="%"
@@ -158,35 +161,39 @@ export default function EnvironmentalImpactSection() {
                 isActive={activeComparison === "with"}
                 showWithValue={activeComparison === "with"}
                 inverted
+                isEditMode={isEditMode}
               />
             </div>
 
             {/* Stats bar at bottom */}
-            <div className={`px-6 py-4 border-t transition-colors duration-500 ${
-              activeComparison === "with" 
-                ? "bg-primary-green/5 border-primary-green/20" 
+            <div className={`px-6 py-4 border-t transition-colors duration-500 ${activeComparison === "with"
+                ? "bg-primary-green/5 border-primary-green/20"
                 : "bg-red-500/5 border-red-500/20"
-            }`}>
+              }`}>
               <div className="flex justify-between items-center text-sm">
-                <StatItem 
-                  label="CO₂" 
-                  value={activeComparison === "with" ? "-65%" : "HIGH"} 
-                  isPositive={activeComparison === "with"} 
+                <StatItem
+                  label="CO₂"
+                  value={activeComparison === "with" ? "-65%" : "HIGH"}
+                  isPositive={activeComparison === "with"}
+                  isEditMode={isEditMode}
                 />
-                <StatItem 
-                  label="E-WASTE" 
-                  value={activeComparison === "with" ? "-50%" : "▲▲▲"} 
-                  isPositive={activeComparison === "with"} 
+                <StatItem
+                  label="E-WASTE"
+                  value={activeComparison === "with" ? "-50%" : "▲▲▲"}
+                  isPositive={activeComparison === "with"}
+                  isEditMode={isEditMode}
                 />
-                <StatItem 
-                  label="ENERGY" 
-                  value={activeComparison === "with" ? "+40%" : "POOR"} 
-                  isPositive={activeComparison === "with"} 
+                <StatItem
+                  label="ENERGY"
+                  value={activeComparison === "with" ? "+40%" : "POOR"}
+                  isPositive={activeComparison === "with"}
+                  isEditMode={isEditMode}
                 />
-                <StatItem 
-                  label="STATUS" 
-                  value={activeComparison === "with" ? "OPTIMAL" : "CRITICAL"} 
-                  isPositive={activeComparison === "with"} 
+                <StatItem
+                  label="STATUS"
+                  value={activeComparison === "with" ? "OPTIMAL" : "CRITICAL"}
+                  isPositive={activeComparison === "with"}
+                  isEditMode={isEditMode}
                 />
               </div>
             </div>
@@ -199,11 +206,10 @@ export default function EnvironmentalImpactSection() {
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full transition-all duration-1000 ${
-            activeComparison === "with"
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full transition-all duration-1000 ${activeComparison === "with"
               ? "bg-primary-green/5"
               : "bg-red-500/5"
-          } blur-[100px]`}
+            } blur-[100px]`}
         />
       </div>
     </section>
@@ -214,16 +220,18 @@ function StatItem({
   label,
   value,
   isPositive,
+  isEditMode = false,
 }: {
   label: string;
   value: string;
   isPositive: boolean;
+  isEditMode?: boolean;
 }) {
   return (
     <div className="flex items-center gap-2">
       <span className="text-primary-light/50">{label}:</span>
       <span className={`font-bold ${isPositive ? "text-primary-green" : "text-red-400"}`}>
-        {value}
+        <EditableText initialText={value} isEditMode={isEditMode} />
       </span>
     </div>
   );
@@ -237,6 +245,7 @@ function ChartCard({
   isActive,
   showWithValue,
   inverted = false,
+  isEditMode = false,
 }: {
   title: string;
   unit: string;
@@ -245,32 +254,30 @@ function ChartCard({
   isActive: boolean;
   showWithValue: boolean;
   inverted?: boolean;
+  isEditMode?: boolean;
 }) {
   const currentValue = showWithValue ? withValue : withoutValue;
 
   return (
-    <div className={`p-4 rounded-xl border transition-all duration-500 ${
-      isActive
+    <div className={`p-4 rounded-xl border transition-all duration-500 ${isActive
         ? "border-primary-green/20 bg-primary-green/5"
         : "border-red-500/20 bg-red-500/5"
-    }`}>
+      }`}>
       {/* Title */}
       <div className="text-sm text-primary-light/60 mb-3 font-medium">
-        {title}
+        <EditableText initialText={title} isEditMode={isEditMode} />
       </div>
-      
+
       {/* Value */}
-      <div className={`text-2xl font-bold transition-colors duration-500 ${
-        isActive ? "text-primary-green" : "text-red-400"
-      }`}>
-        {currentValue}
+      <div className={`text-2xl font-bold transition-colors duration-500 ${isActive ? "text-primary-green" : "text-red-400"
+        }`}>
+        <EditableText initialText={currentValue.toString()} isEditMode={isEditMode} />
         <span className="text-xs text-primary-light/50 ml-1 font-normal">{unit}</span>
       </div>
-      
+
       {/* Change indicator */}
-      <div className={`text-xs font-medium mt-1 ${
-        isActive ? "text-primary-green" : "text-red-400"
-      }`}>
+      <div className={`text-xs font-medium mt-1 ${isActive ? "text-primary-green" : "text-red-400"
+        }`}>
         {showWithValue ? (
           inverted ? (
             `▲ ${Math.round(((withValue - withoutValue) / withoutValue) * 100)}%`

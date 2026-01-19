@@ -2,11 +2,18 @@
 
 import { useEffect, useState, useRef } from "react";
 
-export default function RoadAnalogySection() {
-  const [isVisible, setIsVisible] = useState(false);
+import EditableText from "@/components/ui/EditableText";
+
+export default function RoadAnalogySection({ isStatic = false, isEditMode = false }: { isStatic?: boolean, isEditMode?: boolean }) {
+  const [isVisible, setIsVisible] = useState(isStatic);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (isStatic) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -23,7 +30,7 @@ export default function RoadAnalogySection() {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [isStatic]);
 
   return (
     <section
@@ -43,11 +50,20 @@ export default function RoadAnalogySection() {
       <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
         {/* Header */}
         <div className="text-center mb-10 md:mb-14">
-          <h2 className="text-3xl md:text-5xl font-bold text-primary-light mb-4">
-            Think of it like <span className="text-primary-green">driving</span>
+          <h2 className="text-3xl md:text-5xl font-bold text-primary-light mb-4 flex justify-center items-center gap-2">
+            <EditableText
+              initialText="Think of it like"
+              isEditMode={isEditMode}
+            />
+            <span className="text-primary-green">
+              <EditableText initialText="driving" isEditMode={isEditMode} />
+            </span>
           </h2>
           <p className="text-lg md:text-xl text-primary-light/60 max-w-2xl mx-auto">
-            A simple way to understand network resilience
+            <EditableText
+              initialText="A simple way to understand network resilience"
+              isEditMode={isEditMode}
+            />
           </p>
         </div>
 
@@ -59,12 +75,13 @@ export default function RoadAnalogySection() {
               transition-all duration-1000 delay-200
               ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"}
             `}
+            style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
           >
             <div className="bg-[#1a1a1a] rounded-2xl p-6 md:p-8 border border-red-500/20 h-full flex flex-col">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
                 <span className="text-red-400 font-semibold uppercase tracking-wider text-sm">
-                  The Old Way
+                  <EditableText initialText="The Old Way" isEditMode={isEditMode} />
                 </span>
               </div>
 
@@ -105,10 +122,13 @@ export default function RoadAnalogySection() {
 
               <div className="text-center mt-auto">
                 <h3 className="text-xl md:text-2xl font-bold text-primary-light mb-3">
-                  Road blocked? <span className="text-red-400">You&apos;re stuck.</span>
+                  <EditableText initialText="Road blocked?" isEditMode={isEditMode} />
+                  <span className="text-red-400">
+                    <EditableText initialText="You're stuck." isEditMode={isEditMode} />
+                  </span>
                 </h3>
                 <p className="text-primary-light/60 text-base">
-                  One path. One failure point. No alternatives.
+                  <EditableText initialText="One path. One failure point. No alternatives." isEditMode={isEditMode} />
                 </p>
               </div>
             </div>
@@ -120,31 +140,48 @@ export default function RoadAnalogySection() {
               transition-all duration-1000 delay-500
               ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"}
             `}
+            style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
           >
             <div className="bg-[#1a1a1a] rounded-2xl p-6 md:p-8 border border-primary-green/20 h-full flex flex-col">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-3 h-3 rounded-full bg-primary-green animate-pulse" />
                 <span className="text-primary-green font-semibold uppercase tracking-wider text-sm">
-                  With AirGuard
+                  <EditableText initialText="With AirGuard" isEditMode={isEditMode} />
                 </span>
               </div>
 
               {/* Road visualization - Solution */}
-              <div className="relative h-32 md:h-40 mb-6 flex-shrink-0">
+              <div className="relative h-32 md:h-40 mb-6 flex-shrink-0 overflow-hidden">
                 <svg viewBox="0 0 400 100" className="w-full h-full">
-                  {/* Multiple roads */}
-                  <path d="M 20 50 L 150 50" stroke="#444" strokeWidth="12" strokeLinecap="round" fill="none" />
-                  <path d="M 250 50 L 380 50" stroke="#444" strokeWidth="12" strokeLinecap="round" fill="none" />
-                  {/* Alternative routes */}
-                  <path d="M 150 50 Q 200 20 250 50" stroke="#444" strokeWidth="12" strokeLinecap="round" fill="none" />
-                  <path d="M 150 50 Q 200 80 250 50" stroke="#444" strokeWidth="12" strokeLinecap="round" fill="none" />
-                  
-                  {/* Blockage on middle top path */}
+                  <defs>
+                    <linearGradient id="roadGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#222" />
+                      <stop offset="50%" stopColor="#333" />
+                      <stop offset="100%" stopColor="#222" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Infinite Highway Background */}
+                  <rect x="0" y="20" width="400" height="60" fill="url(#roadGradient)" opacity="0.5" />
+
+                  {/* Multiple Lanes */}
+                  {[25, 35, 45, 55, 65, 75].map((y, i) => (
+                    <path
+                      key={i}
+                      d={`M 0 ${y} L 400 ${y}`}
+                      stroke="#444"
+                      strokeWidth="1"
+                      strokeDasharray="10 20"
+                      opacity="0.5"
+                    />
+                  ))}
+
+                  {/* Top Lane Blockage */}
                   <g>
-                    <rect x="185" y="22" width="20" height="20" fill="#ff5643" rx="3" opacity="0.6" />
-                    <text x="195" y="37" textAnchor="middle" fill="white" fontSize="12">✕</text>
+                    <rect x="220" y="22" width="20" height="14" fill="#ff5643" rx="2" opacity="0.8" />
+                    <text x="230" y="33" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">✕</text>
                   </g>
-                  
+
                   {/* Active route highlight (bottom path) */}
                   <path
                     d="M 150 50 Q 200 80 250 50"
@@ -152,45 +189,63 @@ export default function RoadAnalogySection() {
                     strokeWidth="4"
                     strokeLinecap="round"
                     fill="none"
-                    className="animate-pulse"
+                    className={!isStatic ? "animate-pulse" : ""}
                   />
-                  
+
                   {/* Car moving on alternative route */}
-                  <g>
-                    <rect x="180" y="60" width="30" height="16" fill="#d8ff43" rx="3">
-                      <animateMotion
-                        dur="2s"
-                        repeatCount="indefinite"
-                        path="M 0 0 Q 20 15 40 0"
-                      />
-                    </rect>
-                    <circle cx="188" cy="76" r="4" fill="#333">
-                      <animateMotion
-                        dur="2s"
-                        repeatCount="indefinite"
-                        path="M 0 0 Q 20 15 40 0"
-                      />
-                    </circle>
-                    <circle cx="202" cy="76" r="4" fill="#333">
-                      <animateMotion
-                        dur="2s"
-                        repeatCount="indefinite"
-                        path="M 0 0 Q 20 15 40 0"
-                      />
-                    </circle>
-                  </g>
-                  
-                  {/* Destination */}
-                  <circle cx="360" cy="50" r="8" fill="#d8ff43" />
+                  {!isStatic && (
+                    <g>
+                      <rect x="180" y="60" width="30" height="16" fill="#d8ff43" rx="3">
+                        <animateMotion
+                          dur="3s"
+                          repeatCount="indefinite"
+                          path="M -30 -10 L 220 -10"
+                        />
+                      </rect>
+                    </g>
+                  )}
+                  {/* Static Car Position if Static */}
+                  {isStatic && (
+                    <rect x="250" y="42" width="30" height="16" fill="#d8ff43" rx="3" />
+                  )}
+
+                  {/* Other traffic (faded) - only animated if not static */}
+                  {!isStatic ? (
+                    <>
+                      <circle r="4" fill="#333">
+                        <animateMotion
+                          dur="4s"
+                          repeatCount="indefinite"
+                          path="M 20 20 L 380 20"
+                        />
+                      </circle>
+                      <circle r="4" fill="#333">
+                        <animateMotion
+                          dur="5s"
+                          repeatCount="indefinite"
+                          path="M 380 80 L 20 80"
+                        />
+                      </circle>
+                    </>
+                  ) : (
+                    <>
+                      {/* Static traffic positions */}
+                      <circle cx="200" cy="20" r="4" fill="#333" />
+                      <circle cx="300" cy="80" r="4" fill="#333" />
+                    </>
+                  )}
                 </svg>
               </div>
 
               <div className="text-center mt-auto">
                 <h3 className="text-xl md:text-2xl font-bold text-primary-light mb-3">
-                  Road blocked? <span className="text-primary-green">Reroute instantly.</span>
+                  <EditableText initialText="Road blocked?" isEditMode={isEditMode} />
+                  <span className="text-primary-green">
+                    <EditableText initialText="Reroute instantly." isEditMode={isEditMode} />
+                  </span>
                 </h3>
                 <p className="text-primary-light/60 text-base">
-                  Multiple paths. Automatic rerouting. Always connected.
+                  <EditableText initialText="Multiple paths. Automatic rerouting. Always connected." isEditMode={isEditMode} />
                 </p>
               </div>
             </div>
@@ -204,12 +259,16 @@ export default function RoadAnalogySection() {
             transition-all duration-1000 delay-700
             ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
           `}
+          style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
         >
           <p className="text-lg md:text-xl text-primary-light/80">
-            Your data deserves <span className="text-primary-green font-semibold">the same smart routing.</span>
+            <EditableText initialText="Your data deserves" isEditMode={isEditMode} />
+            <span className="text-primary-green font-semibold">
+              <EditableText initialText="the same smart routing." isEditMode={isEditMode} />
+            </span>
           </p>
         </div>
-      </div>
-    </section>
+      </div >
+    </section >
   );
 }

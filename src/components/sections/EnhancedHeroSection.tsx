@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Logo from "@/app/favicon.ico";
+import EditableText from "@/components/ui/EditableText";
 import { newDeckContent } from "@/data/newDeckContent";
 import { useNavigation } from "@/hooks";
 
-export default function EnhancedHeroSection() {
+export default function EnhancedHeroSection({ isStatic = false, isEditMode = false }: { isStatic?: boolean, isEditMode?: boolean }) {
   const { scrollToSection } = useNavigation();
 
   const handleScrollToProblem = () => {
@@ -27,16 +28,32 @@ export default function EnhancedHeroSection() {
           />
 
           {/* AIRGUARD Title */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-black text-primary-light uppercase tracking-tighter">
-            AIRGUARD
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-black text-primary-light uppercase tracking-tighter flex items-center gap-2">
+            <EditableText
+              initialText="AIRGUARD"
+              isEditMode={isEditMode}
+              className="outline-none"
+            />
           </h1>
         </div>
 
         {/* Animated Terminal Text */}
-        <div className="flex justify-center mb-8">
-          <div className="terminal-text text-xl md:text-3xl lg:text-4xl font-bold text-primary-green" style={{ fontFamily: "'Press Start 2P', monospace" }}>
-            <span className="typewriter">The New Internet</span>
-            <span className="cursor-blink">_</span>
+        <div className="flex justify-center mb-8 w-full">
+          <div className="terminal-text text-xl md:text-3xl lg:text-4xl font-bold text-primary-green flex justify-center w-full text-center" style={{ fontFamily: "'Press Start 2P', monospace" }}>
+            {isEditMode ? (
+              <EditableText
+                initialText="The New Internet"
+                isEditMode={true}
+                className="mx-auto text-center bg-transparent border-b border-primary-green outline-none"
+              />
+            ) : isStatic ? (
+              <span>The New Internet_</span>
+            ) : (
+              <>
+                <span className="typewriter">The New Internet</span>
+                <span className="cursor-blink">_</span>
+              </>
+            )}
           </div>
         </div>
 

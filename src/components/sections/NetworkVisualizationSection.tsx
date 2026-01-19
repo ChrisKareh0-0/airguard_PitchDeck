@@ -120,6 +120,7 @@ function NetworkDiagram({
   showPulse = false,
   highlightHub = false,
   className = "",
+  isStatic = false,
 }: {
   nodes: Node[];
   connections: Connection[];
@@ -127,6 +128,7 @@ function NetworkDiagram({
   showPulse?: boolean;
   highlightHub?: boolean;
   className?: string;
+  isStatic?: boolean;
 }) {
   const getNodePosition = (id: string) => {
     const node = nodes.find((n) => n.id === id);
@@ -149,40 +151,43 @@ function NetworkDiagram({
           </feMerge>
         </filter>
 
-        {/* Animated gradient for lines */}
-        <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#d8ff43" stopOpacity="0.3" />
-          <stop offset="50%" stopColor="#d8ff43" stopOpacity="1" />
-          <stop offset="100%" stopColor="#d8ff43" stopOpacity="0.3" />
-        </linearGradient>
+        {/* Animated gradient for lines - only if not static */}
+        {!isStatic && (
+          <>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#d8ff43" stopOpacity="0.3" />
+              <stop offset="50%" stopColor="#d8ff43" stopOpacity="1" />
+              <stop offset="100%" stopColor="#d8ff43" stopOpacity="0.3" />
+            </linearGradient>
 
-        {/* Pulse gradient for data flow */}
-        <linearGradient id="pulseGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#d8ff43" stopOpacity="0">
-            <animate
-              attributeName="offset"
-              values="-0.5;1.5"
-              dur="2s"
-              repeatCount="indefinite"
-            />
-          </stop>
-          <stop offset="25%" stopColor="#d8ff43" stopOpacity="1">
-            <animate
-              attributeName="offset"
-              values="-0.25;1.75"
-              dur="2s"
-              repeatCount="indefinite"
-            />
-          </stop>
-          <stop offset="50%" stopColor="#d8ff43" stopOpacity="0">
-            <animate
-              attributeName="offset"
-              values="0;2"
-              dur="2s"
-              repeatCount="indefinite"
-            />
-          </stop>
-        </linearGradient>
+            <linearGradient id="pulseGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#d8ff43" stopOpacity="0">
+                <animate
+                  attributeName="offset"
+                  values="-0.5;1.5"
+                  dur="2s"
+                  repeatCount="indefinite"
+                />
+              </stop>
+              <stop offset="25%" stopColor="#d8ff43" stopOpacity="1">
+                <animate
+                  attributeName="offset"
+                  values="-0.25;1.75"
+                  dur="2s"
+                  repeatCount="indefinite"
+                />
+              </stop>
+              <stop offset="50%" stopColor="#d8ff43" stopOpacity="0">
+                <animate
+                  attributeName="offset"
+                  values="0;2"
+                  dur="2s"
+                  repeatCount="indefinite"
+                />
+              </stop>
+            </linearGradient>
+          </>
+        )}
 
         {/* Red warning gradient for hub failure */}
         <radialGradient id="warningGlow" cx="50%" cy="50%" r="50%">
@@ -206,13 +211,13 @@ function NetworkDiagram({
               stroke="#d8ff43"
               strokeWidth="0.3"
               strokeOpacity={isActive ? 0.4 : 0}
-              className="transition-all duration-500"
+              className={!isStatic ? "transition-all duration-500" : ""}
               style={{
-                transitionDelay: `${conn.delay}s`,
+                transitionDelay: !isStatic ? `${conn.delay}s` : "0s",
               }}
             />
-            {/* Animated pulse line */}
-            {showPulse && isActive && (
+            {/* Animated pulse line - ONLY if not static */}
+            {!isStatic && showPulse && isActive && (
               <line
                 x1={from.x}
                 y1={from.y}
@@ -226,8 +231,8 @@ function NetworkDiagram({
                 }}
               />
             )}
-            {/* Animated dot traveling along the line */}
-            {showPulse && isActive && (
+            {/* Animated dot traveling along the line - ONLY if not static */}
+            {!isStatic && showPulse && isActive && (
               <circle r="0.8" fill="#d8ff43" filter="url(#glow)">
                 <animateMotion
                   dur={`${1.5 + Math.random() * 0.5}s`}
@@ -261,7 +266,7 @@ function NetworkDiagram({
                 cy={node.y}
                 r="8"
                 fill="url(#warningGlow)"
-                className="animate-pulse"
+                className={!isStatic ? "animate-pulse" : ""}
               />
             )}
             {/* Node outer glow */}
@@ -271,9 +276,9 @@ function NetworkDiagram({
               r={isHub ? 3.5 : 2.5}
               fill="#d8ff43"
               fillOpacity={isActive ? 0.2 : 0}
-              className="transition-all duration-500"
+              className={!isStatic ? "transition-all duration-500" : ""}
               style={{
-                transitionDelay: `${node.delay}s`,
+                transitionDelay: !isStatic ? `${node.delay}s` : "0s",
               }}
             />
             {/* Node core */}
@@ -284,13 +289,13 @@ function NetworkDiagram({
               fill={highlightHub && isHub ? "#ff5643" : "#d8ff43"}
               fillOpacity={isActive ? 1 : 0}
               filter="url(#glow)"
-              className="transition-all duration-500"
+              className={!isStatic ? "transition-all duration-500" : ""}
               style={{
-                transitionDelay: `${node.delay}s`,
+                transitionDelay: !isStatic ? `${node.delay}s` : "0s",
               }}
             />
-            {/* Pulse animation for active nodes */}
-            {showPulse && isActive && !isHub && (
+            {/* Pulse animation for active nodes - ONLY if not static */}
+            {!isStatic && showPulse && isActive && !isHub && (
               <circle
                 cx={node.x}
                 cy={node.y}
@@ -323,17 +328,23 @@ function NetworkDiagram({
   );
 }
 
-export default function NetworkVisualizationSection() {
-  const [phase, setPhase] = useState<
-    "initial" | "problem-active" | "transitioning" | "solution-visible"
-  >("initial");
+import EditableText from "@/components/ui/EditableText";
+
+export default function NetworkVisualizationSection({ isStatic = false, isEditMode = false }: { isStatic?: boolean, isEditMode?: boolean }) {
+  const [phase, setPhase] = useState("initial"); // initial, problem, solution-start, solution-visible
   const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
 
   const linearNetwork = createLinearNetwork();
   const meshNetwork = createMeshNetwork();
 
   useEffect(() => {
+    if (isStatic) {
+      setPhase("solution-visible");
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -362,7 +373,7 @@ export default function NetworkVisualizationSection() {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [isStatic]);
 
   return (
     <section
@@ -387,9 +398,11 @@ export default function NetworkVisualizationSection() {
       <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
         {/* Section Title */}
         <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-5xl font-bold text-primary-light">
-            Network Architecture
-            <span className="text-primary-green"> Evolution</span>
+          <h2 className="text-3xl md:text-5xl font-bold text-primary-light flex flex-col md:flex-row items-center justify-center gap-2">
+            <EditableText initialText="Network Architecture" isEditMode={isEditMode} />
+            <span className="text-primary-green">
+              <EditableText initialText="Evolution" isEditMode={isEditMode} />
+            </span>
           </h2>
         </div>
 
@@ -400,21 +413,20 @@ export default function NetworkVisualizationSection() {
             className={`
               absolute md:relative w-full md:w-1/2 h-[320px] md:h-[380px]
               transition-all duration-1000 ease-in-out
-              ${
-                phase === "initial"
-                  ? "opacity-0 scale-90"
-                  : phase === "problem-active"
+              ${phase === "initial"
+                ? "opacity-0 scale-90"
+                : phase === "problem-active"
                   ? "opacity-100 scale-100 left-0 right-0"
                   : "opacity-100 scale-100 md:scale-90"
               }
-              ${
-                phase === "transitioning" || phase === "solution-visible"
-                  ? "md:translate-x-0"
-                  : phase === "problem-active"
+              ${phase === "transitioning" || phase === "solution-visible"
+                ? "md:translate-x-0"
+                : phase === "problem-active"
                   ? "md:translate-x-1/2"
                   : ""
               }
             `}
+            style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
           >
             {/* Problem label */}
             <div
@@ -425,10 +437,10 @@ export default function NetworkVisualizationSection() {
               `}
             >
               <span className="text-sm md:text-base font-semibold text-red-400 uppercase tracking-wider">
-                The Problem
+                <EditableText initialText="The Problem" isEditMode={isEditMode} />
               </span>
               <h3 className="text-xl md:text-2xl font-bold text-primary-light mt-1">
-                Single Point of Failure
+                <EditableText initialText="Traditional Internet operates on a single path" isEditMode={isEditMode} />
               </h3>
             </div>
 
@@ -440,6 +452,7 @@ export default function NetworkVisualizationSection() {
                 isActive={phase !== "initial"}
                 showPulse={phase === "problem-active"}
                 highlightHub={phase !== "initial"}
+                isStatic={isStatic}
               />
             </div>
 
@@ -450,12 +463,13 @@ export default function NetworkVisualizationSection() {
                 transition-all duration-500 delay-500
                 ${phase === "initial" ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"}
               `}
+              style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
             >
               <p className="text-sm md:text-base text-primary-light/70 max-w-sm">
-                Traditional networks rely on central hubs. When one fails,
+                <EditableText initialText="Traditional networks rely on central hubs. When one fails," isEditMode={isEditMode} />
                 <span className="text-red-400 font-semibold">
                   {" "}
-                  everything goes down.
+                  <EditableText initialText="everything goes down." isEditMode={isEditMode} />
                 </span>
               </p>
             </div>
@@ -467,15 +481,15 @@ export default function NetworkVisualizationSection() {
               hidden md:flex absolute md:relative z-20 flex-col items-center justify-center
               px-4 md:px-8
               transition-all duration-700
-              ${
-                phase === "transitioning" || phase === "solution-visible"
-                  ? "opacity-100 scale-100"
-                  : "opacity-0 scale-50"
+              ${phase === "transitioning" || phase === "solution-visible"
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-50"
               }
             `}
+            style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
           >
             <span className="text-primary-green font-bold text-lg md:text-xl mb-2 whitespace-nowrap">
-              Solution
+              <EditableText initialText="Solution" isEditMode={isEditMode} />
             </span>
             <div className="relative">
               {/* Arrow */}
@@ -498,8 +512,8 @@ export default function NetworkVisualizationSection() {
                   `}
                 />
               </svg>
-              {/* Animated pulse on arrow */}
-              {phase === "solution-visible" && (
+              {/* Animated pulse on arrow - ONLY if not static */}
+              {!isStatic && phase === "solution-visible" && (
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-3 h-3 bg-primary-green rounded-full animate-ping" />
                 </div>
@@ -512,20 +526,20 @@ export default function NetworkVisualizationSection() {
             className={`
               absolute md:relative w-full md:w-1/2 h-[320px] md:h-[380px]
               transition-all duration-1000 ease-in-out
-              ${
-                phase === "solution-visible"
-                  ? "opacity-100 scale-100 translate-x-0"
-                  : "opacity-0 scale-90 translate-x-8"
+              ${phase === "solution-visible"
+                ? "opacity-100 scale-100 translate-x-0"
+                : "opacity-0 scale-90 translate-x-8"
               }
             `}
+            style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
           >
             {/* Solution label */}
             <div className="absolute top-0 right-0 text-right">
               <span className="text-sm md:text-base font-semibold text-primary-green uppercase tracking-wider">
-                The Solution
+                <EditableText initialText="The Solution" isEditMode={isEditMode} />
               </span>
               <h3 className="text-xl md:text-2xl font-bold text-primary-light mt-1">
-                Self-Healing Mesh
+                <EditableText initialText="Airguard predicts the issue and changes paths before disaster" isEditMode={isEditMode} multiline />
               </h3>
             </div>
 
@@ -536,6 +550,7 @@ export default function NetworkVisualizationSection() {
                 connections={meshNetwork.connections}
                 isActive={phase === "solution-visible"}
                 showPulse={phase === "solution-visible"}
+                isStatic={isStatic}
               />
             </div>
 
@@ -544,19 +559,20 @@ export default function NetworkVisualizationSection() {
               className={`
                 absolute -bottom-12 left-0 right-0 text-center md:text-right
                 transition-all duration-500 delay-700
-                ${
-                  phase === "solution-visible"
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4"
+                ${phase === "solution-visible"
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
                 }
               `}
+              style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
             >
               <p className="text-sm md:text-base text-primary-light/70 max-w-sm md:ml-auto">
-                AirGuard creates{" "}
+                <EditableText initialText="AirGuard creates" isEditMode={isEditMode} />
                 <span className="text-primary-green font-semibold">
-                  intelligent mesh networks
+                  {" "}
+                  <EditableText initialText="intelligent mesh networks" isEditMode={isEditMode} />
                 </span>{" "}
-                that automatically reroute around failures.
+                <EditableText initialText="that automatically reroute around failures." isEditMode={isEditMode} />
               </p>
             </div>
           </div>
@@ -567,15 +583,15 @@ export default function NetworkVisualizationSection() {
           className={`
             md:hidden flex flex-col items-center justify-center py-8
             transition-all duration-700
-            ${
-              phase === "transitioning" || phase === "solution-visible"
-                ? "opacity-100"
-                : "opacity-0"
+            ${phase === "transitioning" || phase === "solution-visible"
+              ? "opacity-100"
+              : "opacity-0"
             }
           `}
+          style={isStatic ? { transition: "none", animation: "none", opacity: 1 } : undefined}
         >
           <span className="text-primary-green font-bold text-lg mb-2">
-            Solution
+            <EditableText initialText="Solution" isEditMode={isEditMode} />
           </span>
           <svg
             width="40"
@@ -597,37 +613,31 @@ export default function NetworkVisualizationSection() {
         {/* Bottom stats */}
         <div
           className={`
-            grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-16
+            grid grid-cols-1 gap-4 md:gap-8 mt-12 md:mt-16
             transition-all duration-700 delay-1000
-            ${
-              phase === "solution-visible"
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
+            ${phase === "solution-visible"
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8"
             }
           `}
+          style={isStatic ? { transition: "none", animation: "none", opacity: 1, transform: "none" } : undefined}
         >
-          <div className="text-center">
-            <div className="text-2xl md:text-4xl font-bold text-primary-green">
-              99.9%
+          <div className="flex justify-around w-full">
+            <div className="text-center">
+              <div className="text-2xl md:text-4xl font-bold text-primary-green">
+                <EditableText initialText="0" isEditMode={isEditMode} />
+              </div>
+              <div className="text-xs md:text-sm text-primary-light/60 mt-1">
+                <EditableText initialText="Downtime" isEditMode={isEditMode} />
+              </div>
             </div>
-            <div className="text-xs md:text-sm text-primary-light/60 mt-1">
-              Uptime Guaranteed
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl md:text-4xl font-bold text-primary-green">
-              &lt;100ms
-            </div>
-            <div className="text-xs md:text-sm text-primary-light/60 mt-1">
-              Failover Time
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl md:text-4xl font-bold text-primary-green">
-              0
-            </div>
-            <div className="text-xs md:text-sm text-primary-light/60 mt-1">
-              Single Points of Failure
+            <div className="text-center">
+              <div className="text-2xl md:text-4xl font-bold text-primary-green">
+                <EditableText initialText="<100ms" isEditMode={isEditMode} />
+              </div>
+              <div className="text-xs md:text-sm text-primary-light/60 mt-1">
+                <EditableText initialText="Failover" isEditMode={isEditMode} />
+              </div>
             </div>
           </div>
         </div>
